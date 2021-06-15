@@ -7,7 +7,7 @@ library(quanteda)
 library(stringi)
 
 eng <- tesseract(language = "eng", options = list(tessedit_pageseg_mode = 1))
-readpdf <- image_read_pdf("speeches_pdf/S_PV.8732_E.pdf")
+readpdf <- image_read_pdf("speeches_pdf/S_PV.8724_E.pdf")
 txt <- ocr(readpdf, engine = eng)
 readpdf2 <- str_replace_all(paste(txt, collapse= " "), "[:blank:]{2,}","") 
 readpdf3 <- str_replace_all(readpdf2, "\\\n"," ")
@@ -17,7 +17,7 @@ readpdf3 <- stri_trans_general(readpdf3, "Latin-ASCII")
 # vector speech
 
 separate_unsc <- str_split(readpdf3,
-                           "(?=\\b(Dato[ ]Lim[ ]Jock[ ]Hoi[:]))|(?=\\b(Monsignor[ ]Hansen|The[ ]President|President[ ]Abbas|Aboul[ ]Gheit|King[ ]Philippe|The Secretary-General)[ ][()])|(?=\\b(The President|The Secretary-General)\\:)|(?=\\b(Mr|Ms|Mrs)[.][ ](Lowcock|Griffiths|Chambas|Robinson|Skoog|Mardini|Ruiz[ ]Massieu|Lacroix|Rajasingham|DiCarlo|Mueller|Raz|Matar|Salame|Licharz|Nakamitsu|Spleeters|Rama|Pedersen|Voronkov|Coninsx|Freij|Mladenov|Becker|Bachelet|De[ ]Roux|Sooka|Sori[-]Coulibaly|Costa[ ]Filho|Grau|Cevik|La[ ]Lime|Swan|Madeira|Smith)[:])|(?=\\b(Mr|Mrs|Ms)[.][ ]([A-Z]*[a-z]*|[A-Z]*[a-z]*[ ][A-Z]*[a-z]*|[A-Z]*[a-z]*[ ][A-Z]*[a-z]*[ ][A-Z]*[a-z]*|[A-Z]*[a-z]*[-][A-Z]*[a-z]*|[A-Z]*[a-z]*[A-Z]*[a-z]*|[A-Z]*[a-z]*.[A-Z]*[a-z]*|Pinto[ ]Lopes[ ]D.Alva)[ ][(])") %>% unlist()
+                           "(?=\\b(Dato[ ]Lim[ ]Jock[ ]Hoi[:]))|(?=\\b(Monsignor[ ]Hansen|The[ ]President|President[ ]Abbas|Aboul[ ]Gheit|King[ ]Philippe|The Secretary-General|Hadiza)[ ][(])|(?=\\b(The President|The Secretary-General)\\:)|(?=\\b(Mr|Ms|Mrs)[.][ ](Lowcock|Griffiths|Chambas|Robinson|Skoog|Mardini|Ruiz[ ]Massieu|Lacroix|Rajasingham|DiCarlo|Mueller|Raz|Matar|Salame|Licharz|Nakamitsu|Spleeters|Rama|Pedersen|Voronkov|Coninsx|Freij|Mladenov|Becker|Bachelet|De[ ]Roux|Sooka|Sori[-]Coulibaly|Costa[ ]Filho|Grau|Cevik|La[ ]Lime|Swan|Madeira|Smith|Zlauvinen|Mueller|Fore|Hennis[-]Plasschaert|Shearer|Sunday|Mohammed|Dieye|Alsaidy|Almasabi|De[ ]Almeida[ ]Filho|Waly|Tsolakis|Annadif|Vervaeke|Onanga[-]Anyanga)[:])|(?=\\b(Mr|Mrs|Ms)[.][ ]([A-Z]*[a-z]*|[A-Z]*[a-z]*[ ][A-Z]*[a-z]*|[A-Z]*[a-z]*[ ][A-Z]*[a-z]*[ ][A-Z]*[a-z]*|[A-Z]*[a-z]*[-][A-Z]*[a-z]*|[A-Z]*[a-z]*[A-Z]*[a-z]*|[A-Z]*[a-z]*.[A-Z]*[a-z]*|Pinto[ ]Lopes[ ]D.Alva)[ ][(])") %>% unlist()
 
 # tibble speech
 
@@ -65,7 +65,7 @@ df$speaker <- sub("[ ][(]", "", df$speaker)
 
 # participant type part 1
 
-df$participanttype <- str_extract(df$content, "(Monsignor[ ]Hansen|Dato[ ]Lim[ ]Jock[ ]Hoi|President[ ]Abbas|Aboul[ ]Gheit|King[ ]Philippe)|(The President|The Secretary-General)|((Mr|Ms|Mrs)[.][ ](Lowcock|Griffiths|Chambas|Robinson|Skoog|Mardini|Ruiz[ ]Massieu|Lacroix|Rajasingham|DiCarlo|Mueller|Raz|Matar|Salame|Licharz|Nakamitsu|Spleeters|Rama|Pedersen|Voronkov|Coninsx|Freij|Mladenov|Becker|Bachelet|De[ ]Roux|Sooka|Sori[-]Coulibaly|Costa[ ]Filho|Grau|Cevik|La[ ]Lime|Swan|Madeira|Smith))|((Mr|Mrs|Ms)[.][ ]([A-Z]*[a-z]*|[A-Z]*[a-z]*[ ][A-Z]*[a-z]*|[A-Z]*[a-z]*[ ][A-Z]*[a-z]*[ ][A-Z]*[a-z]*|[A-Z]*[a-z]*[-][A-Z]*[a-z]*|[A-Z]*[a-z]*[A-Z]*[a-z]*|[A-Z]*[a-z]*.[A-Z]*[a-z]*|Pinto[ ]Lopes[ ]D.Alva)[ ][()])")
+df$participanttype <- str_extract(df$content, "(Monsignor[ ]Hansen|Dato[ ]Lim[ ]Jock[ ]Hoi|President[ ]Abbas|Aboul[ ]Gheit|King[ ]Philippe|Hadiza)|(The President|The Secretary-General)|((Mr|Ms|Mrs)[.][ ](Lowcock|Griffiths|Chambas|Robinson|Skoog|Mardini|Ruiz[ ]Massieu|Lacroix|Rajasingham|DiCarlo|Mueller|Raz|Matar|Salame|Licharz|Nakamitsu|Spleeters|Rama|Pedersen|Voronkov|Coninsx|Freij|Mladenov|Becker|Bachelet|De[ ]Roux|Sooka|Sori[-]Coulibaly|Costa[ ]Filho|Grau|Cevik|La[ ]Lime|Swan|Madeira|Smith|Zlauvinen|Mueller|Fore|Hennis[-]Plasschaert|Shearer|Sunday|Mohammed|Dieye|Alsaidy|Almasabi|De[ ]Almeida[ ]Filho|Waly|Tsolakis|Annadif|Vervaeke|Onanga[-]Anyanga))|((Mr|Mrs|Ms)[.][ ]([A-Z]*[a-z]*|[A-Z]*[a-z]*[ ][A-Z]*[a-z]*|[A-Z]*[a-z]*[ ][A-Z]*[a-z]*[ ][A-Z]*[a-z]*|[A-Z]*[a-z]*[-][A-Z]*[a-z]*|[A-Z]*[a-z]*[A-Z]*[a-z]*|[A-Z]*[a-z]*.[A-Z]*[a-z]*|Pinto[ ]Lopes[ ]D.Alva)[ ][()])")
 
 df$participanttype <- sub("[ ][(]", "", df$participanttype)
 
@@ -85,14 +85,16 @@ df$country <- str_extract(df$content, "(?<=[(])[^)]+")
 
 df$country[df$participanttype == "The President"] <- 'Belgium'
 
-df$country[df$speaker %in% c("Mr. Chambas", "Mrs. Robinson", "The Secretary-General", "Ruiz Massieu", "Lacroix", "Mr. Griffiths",
+df$country[df$speaker %in% c("Mr. Chambas", "Mrs. Robinson", "The Secretary-General", "Mr. Ruiz Massieu", "Mr. Lacroix", "Mr. Griffiths",
                              "Mr. Rajasingham", "Ms. DiCarlo", "Ms. Mueller", "Mr. Lowcock", "Ms. Matar", "Mr. Salame", "Mr. Licharz",
                              "Mrs. Nakamitsu", "Mr. Spleeters", "Mr. Pedersen", "Mr. Voronkov", "Ms. Coninsx",
                              "Mr. Mladenov", "Ms. Bachelet", "Ms. Sori-Coulibaly", "Mr. Ndiaye", "Mr. Hilale", "Ms. La Lime",
-                             "Mr. Swan")] <- 'UN'
+                             "Mr. Swan", "Mr. Zlauvinen", "Ms. Mueller", "Ms. Fore", "Ms. Hennis-Plasschaert", "Mr. Shearer", "Mr. Dieye",
+                             "Ms. Waly", "Ms. Gamba de Potgieter", "Mr. Annadif", "Mr. Huang Xia", "Mr. Onanga-Anyanga",
+                             "Ms. Zerrougui")] <- 'UN'
 
 # Maybe also representative
-df$country[df$speaker %in% c("Mr. Costa Filho")] <- 'UN'
+df$country[df$speaker %in% c("Mr. Costa Filho", "Mr. De Almeida Filho")] <- 'UN'
 #
 df$country[df$speaker %in% c("Mr. Mardini")] <- 'International Committee of the Red Cross'
 
@@ -112,7 +114,7 @@ df$country[df$speaker %in% c("President Abbas")] <- 'Palestine'
 
 df$country[df$speaker %in% c("Ms. Becker")] <- 'Watchlist on Children and Armed Conflict'
 
-df$country[df$speaker %in% c("Mr. Chergui", "Mr. Matondo", "Mr. Madeira")] <- 'African Union'
+df$country[df$speaker %in% c("Mr. Chergui", "Mr. Matondo", "Mr. Madeira", "Ms. Mohammed")] <- 'African Union'
 
 df$country[df$speaker %in% c("King Philippe")] <- 'Belgium'
 
@@ -124,21 +126,33 @@ df$country[df$speaker %in% c("Ms. Gilles")] <- 'Fondasyon Je Klere (FJKL)'
 
 df$country[df$speaker %in% c("Mr. Smith")] <- 'Stockholm International Peace Research Institute'
 
+df$country[df$speaker %in% c("Ms. Sunday")] <- "Women's Monthly Forum on Peace and Political Processes in South Sudan"
+
+df$country[df$speaker %in% c("Ms. Carabali Rodallega")] <- 'Municipal Association of Women'
+
+df$country[df$speaker %in% c("Ms. Alsaidy")] <- 'Médecins du Monde'
+
+df$country[df$speaker %in% c("Ms. Almasabi")] <- 'Arab Human Rights Foundation'
+
+df$country[df$speaker %in% c("Ms. Tsolakis")] <- 'Global Coalition to Protect Education from Attacks'
+
+df$country[df$speaker %in% c("Hadiza", "Ms. Mayaki")] <- 'Youth Parliament of the Niger'
+
 # participant type part 2
 
 df$participanttype[df$speaker %in% c("Mr. President")] <- 'The President'
 
 df$participanttype[df$country %in% c("Viet Nam",
-                                     "China",
+                                     "South Africa",
                                      "Dominican Republic",
                                      "Estonia",
                                      "France",
+                                     "China",
                                      "Germany",
                                      "Indonesia",
                                      "Niger",
                                      "Russian Federation",
                                      "Saint Vincent and the Grenadines",
-                                     "South Africa",
                                      "Tunisia",
                                      "United Kingdom",
                                      "United States of America")] <- 'Mentioned'
@@ -193,21 +207,23 @@ df$sentences <- nsentence(df$content)
 
 # Remove headers and footers
 
-df$content <- gsub("[ ][ ][0-9]{1,2}[/][0-9]{1,2}[ ][ ]", "", df$content)
+df$content <- gsub("[ ][ ][0-9]{1,2}[/][0-9]{1,2}[ ][ ]", " ", df$content)
 
-df$content <- gsub("[ ][ ]20-05035[ ][ ]", "", df$content)
+df$content <- gsub("[ ][ ]20-03982[ ]", " ", df$content)
 
 #df$content <- gsub("[(]Resumption[ ]1[)][ ]", "", df$content)
 
-df$content <- gsub("S[/]PV[.]8732  The situation in the Middle East  25[/]02[/]2020", "", df$content)
+df$content <- gsub("S[/]PV[.]8724  The situation in Guinea-Bissau  14[/]02[/]2020", "", df$content)
 
-df$content <- gsub("25[/]02[/]2020  The situation in the Middle East  S[/]PV[.]8732", "", df$content)
+df$content <- gsub("14[/]02[/]2020  The situation in Guinea-Bissau  S[/]PV[.]8724", "", df$content)
 
 # teste para footer
 
+x <- str_extract_all(df$content, "[ ][ ][A-Z]*[a-z]*[0-9]*[ ][ ]")
+
 x <- str_extract_all(df$content, "TA")
 
-#df$content <- gsub("[ ]TA9[ ]", "", df$content)
+#df$content <- gsub("[ ]TAS[ ]", "", df$content)
 
 # 
 
@@ -225,10 +241,12 @@ for(i in 1:length(df$content)){write(df$content[i], file = df$filename[i])}
 
 # update base
 
-load("speeches_meta/unsc_2020.RData")
+#load("speeches_meta/unsc_2020.RData")
 
 unsc_2020 <- rbind(unsc_2020, df)
 
 save(unsc_2020, file = "speeches_meta/unsc_2020.RData")
 
 # possível regex para países (?<=[(])[^)]+
+
+# ver nomes dos speakers
