@@ -1,4 +1,4 @@
-### unsc extract
+### unsc extract - live meetings
 library(tidyverse)
 library(magick)
 library(tesseract)
