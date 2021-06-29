@@ -7,7 +7,7 @@ library(quanteda)
 library(stringi)
 
 eng <- tesseract(language = "eng", options = list(tessedit_pageseg_mode = 1))
-readpdf <- image_read_pdf("speeches_pdf/S_2020_644_E.pdf")
+readpdf <- image_read_pdf("speeches_pdf/S_2020_930_E.pdf")
 readpdf <- ocr(readpdf, engine = eng)
 readpdf <- str_replace_all(paste(readpdf, collapse= " "), "[:blank:]{2,}","") 
 readpdf <- str_replace_all(readpdf, "\\\n"," ")
@@ -42,15 +42,15 @@ df$spv <- sub("[/]", "_", df$spv)
 
 # topic
 
-df$topic <- str_extract(df$content[1], "(?<=item entitled [:punct:])(.*)(?=[:punct:][.][ ](and|The))")
+# df$topic <- str_extract(df$content[1], "(?<=item entitled [:punct:])(.*)(?=[:punct:][.][ ](and|The))")
+# 
+# df$topic <- str_extract(df$content[1], "(?<=item [:punct:])(.*)(?=[:punct:][.][ ](The|Resolution))")
+# 
+# df$topic <- str_remove(df$topic[1], "[:punct:][.].*")
+# 
+# df$topic <- str_trim(df$topic)
 
-df$topic <- str_extract(df$content[1], "(?<=item [:punct:])(.*)(?=[:punct:][.][ ](The|Resolution))")
-
-df$topic <- str_remove(df$topic[1], "[:punct:][.].*")
-
-df$topic <- str_trim(df$topic)
-
-df$topic <- "Non-proliferation"
+df$topic <- "Protection of civilians in armed conflict"
 
 # speaker
 
@@ -68,7 +68,7 @@ df$speech <- 1:(nrow(df))
 
 df$country <- str_extract(df$content, "(?<=[(])[^)]+")
 
-df$country[df$participanttype == "The President"] <- 'Germany'
+df$country[df$participanttype == "The President"] <- 'Niger'
 
 # day, month, year
 
@@ -128,7 +128,7 @@ df$country[c(2,3,6,10,16)] <- c("UN", "UN", "Dominican Republic", "Indonesia", "
 
 #df$country <- str_trim(str_remove(df$country, "(?=(the)).+?(?<=of)"))
 
-df$participanttype[!df$country %in% c("Germany")] <- 'Mentioned'
+df$participanttype[!df$country %in% c("Niger")] <- 'Mentioned'
 
 df$participanttype[!df$country %in% c("Viet Nam",
                                       "Belgium",
@@ -156,9 +156,9 @@ df$content <- str_remove(df$content, "[0-9]{1,3}[/][0-9]{1,3}$")
 
 df$content <- str_remove(df$content, "[0-9]{1,3}[/][0-9]{1,3}[ ][0-9]{1,3}[/][0-9]{1,3}")
 
-df$content <- gsub("20-09023", "", df$content)
+df$content <- gsub("20-12336", "", df$content)
 
-df$content <- gsub("(S|[$])[/]2020[/]644", "", df$content)
+df$content <- gsub("(S|[$])[/]2020[/]930", "", df$content)
 
 # ----
 
@@ -174,7 +174,7 @@ df$content[2:nrow(df)] <- str_trim(str_remove(df$content[2:nrow(df)], "(?=(State
 
 #df$content[19] <- str_trim(str_remove(df$content[19], "(?=(Annex)).+?(?<=Konjufca)"))
 
-df$content[6] <- str_trim(str_remove(df$content[6], "\\[Original\\: English and French\\]"))
+df$content <- str_trim(str_remove(df$content, "\\[Original\\: English and French\\]|\\[Original\\: Spanish\\]|\\[Original\\: Arabic\\]|\\[Original\\: French\\]|\\[Original\\: English and Chinese\\]|\\[Original\\: English and Arabic\\]"))
 
 df$content <- str_trim(df$content)
 
@@ -182,7 +182,7 @@ df$content <- gsub("[ ]{1,}", " ", df$content)
 
 # Check
 
-x <- str_extract_all(df$content, "[ ][ ][A-Z]*[a-z]*[0-9]*[ ][ ]|[0-9]{1,3}[/][0-9]{1,3}")
+#x <- str_extract_all(df$content, "[ ][ ][A-Z]*[a-z]*[0-9]*[ ][ ]|[0-9]{1,3}[/][0-9]{1,3}")
 
 # types, tokens, sentences
 
