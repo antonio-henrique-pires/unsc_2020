@@ -7,7 +7,7 @@ library(quanteda)
 library(stringi)
 
 eng <- tesseract(language = "eng", options = list(tessedit_pageseg_mode = 1))
-readpdf <- image_read_pdf("speeches_pdf/S_2020_930_E.pdf")
+readpdf <- image_read_pdf("speeches_pdf/S_2020_1324_E.pdf")
 readpdf <- ocr(readpdf, engine = eng)
 readpdf <- str_replace_all(paste(readpdf, collapse= " "), "[:blank:]{2,}","") 
 readpdf <- str_replace_all(readpdf, "\\\n"," ")
@@ -50,11 +50,15 @@ df$spv <- sub("[/]", "_", df$spv)
 # 
 # df$topic <- str_trim(df$topic)
 
-df$topic <- "Protection of civilians in armed conflict"
+#df$topic <- str_extract(df$content[1], '(?<=\").+?(?=\")')
+
+#df$topic <- str_trim(df$topic)
+
+df$topic <- "Non-proliferation"
 
 # speaker
 
-df$speaker <- paste("Mr.", str_trim(str_extract(df$content[1], "(?<=([(]Signed[)][ ]))(.*)(?=( President))")), sep = " ")
+df$speaker <- str_trim(str_extract(df$content[1], "(?<=([(]Signed[)][ ]))(.*)(?=( President))"))
 
 # participant type
 
@@ -68,7 +72,7 @@ df$speech <- 1:(nrow(df))
 
 df$country <- str_extract(df$content, "(?<=[(])[^)]+")
 
-df$country[df$participanttype == "The President"] <- 'Niger'
+df$country[df$participanttype == "The President"] <- 'South Africa'
 
 # day, month, year
 
@@ -124,11 +128,9 @@ df$country[2:nrow(df)] <- str_trim(str_extract(df$content[2:nrow(df)], "(?<=(of)
 
 df$country[2:nrow(df)] <- str_trim(str_remove(df$country[2:nrow(df)], "the "))
 
-df$country[c(2,3,6,10,16)] <- c("UN", "UN", "Dominican Republic", "Indonesia", "Sudan")
-
 #df$country <- str_trim(str_remove(df$country, "(?=(the)).+?(?<=of)"))
 
-df$participanttype[!df$country %in% c("Niger")] <- 'Mentioned'
+df$participanttype[!df$country %in% c("South Africa")] <- 'Mentioned'
 
 df$participanttype[!df$country %in% c("Viet Nam",
                                       "Belgium",
@@ -156,9 +158,9 @@ df$content <- str_remove(df$content, "[0-9]{1,3}[/][0-9]{1,3}$")
 
 df$content <- str_remove(df$content, "[0-9]{1,3}[/][0-9]{1,3}[ ][0-9]{1,3}[/][0-9]{1,3}")
 
-df$content <- gsub("20-12336", "", df$content)
+df$content <- gsub("21-00031", "", df$content)
 
-df$content <- gsub("(S|[$])[/]2020[/]930", "", df$content)
+df$content <- gsub("(S|[$])[/]2020[/]1324", "", df$content)
 
 # ----
 
@@ -174,7 +176,7 @@ df$content[2:nrow(df)] <- str_trim(str_remove(df$content[2:nrow(df)], "(?=(State
 
 #df$content[19] <- str_trim(str_remove(df$content[19], "(?=(Annex)).+?(?<=Konjufca)"))
 
-df$content <- str_trim(str_remove(df$content, "\\[Original\\: English and French\\]|\\[Original\\: Spanish\\]|\\[Original\\: Arabic\\]|\\[Original\\: French\\]|\\[Original\\: English and Chinese\\]|\\[Original\\: English and Arabic\\]"))
+df$content <- str_trim(str_remove(df$content, "\\[Original\\: English and French\\]|\\[Original\\: Spanish\\]|\\[Original\\: Chinese\\]|\\[Original\\: Arabic\\]|\\[Original\\: French\\]|\\[Original\\: English and Chinese\\]|\\[Original\\: English and Arabic\\]|\\[Original\\: Russian\\]"))
 
 df$content <- str_trim(df$content)
 
