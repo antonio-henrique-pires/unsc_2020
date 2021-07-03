@@ -2,6 +2,7 @@
 library(tidyverse)
 library(quanteda)
 library(quanteda.textstats)
+library(openxlsx)
 
 load("speeches_meta/unsc_2020.RData")
 
@@ -305,4 +306,33 @@ unsc_2020$country[unsc_2020$filename %in% "UNSC_2020_SPV.2020_751_spch022.txt"] 
 
 save(unsc_2020, file = "speeches_meta/unsc_2020.RData")
 
+# topics
+
+unsc_2020$topic[unsc_2020$topic == "1591 Commitee"] <- "1591 Committee"
+
+unsc_2020$topic[unsc_2020$topic == "Middle East including the Palestinian question"] <- "Middle East, including the Palestinian question"
+
+unsc_2020$topic[unsc_2020$topic == "Syria (Humanitarian Situation)"] <- "Syria (humanitarian situation)"
+
+unsc_2020$topic[unsc_2020$topic == "Syria (Political Situation)"] <- "Syria (political situation)"
+
+unsc_2020$topic[unsc_2020$topic == "The situation concerning the Democratic Republic of Congo"] <- "The situation concerning the Democratic Republic of the Congo"
+
+unsc_2020$topic[unsc_2020$spv == "2020_340"] <- "Protection of civilians in armed conflict: Protecting civilians from conflict induced hunger"
+
+unsc_2020$topic[unsc_2020$spv == "8711"] <- "Cooperation between the United Nations and regional and subregional organizations in maintaining international peace and security"
+
+unsc_2020$filename <- str_replace_all(unsc_2020$filename, "000", "001")
+
+#write.xlsx(topics, 'topics.xlsx')
+
+z <- topics_2019 %>% filter(str_detect(topic2, "Interim")|
+                            str_detect(subtopic, "Interim")|
+                            str_detect(agenda_item1, "Interim")|
+                            str_detect(agenda_item2, "Interim")|
+                            str_detect(agenda_item3, "Interim"))
+
+y <- unsc_2019 %>% filter(str_detect(speaker, "Fall"))
+
+write.xlsx(spv_topics, 'spv_topics.xlsx')
 
